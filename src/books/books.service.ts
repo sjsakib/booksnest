@@ -1,50 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from './book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-import { InjectRepository } from '@nestjs/typeorm';
+import { BaseCrudService } from 'src/common/BaseCrud.service';
 
 @Injectable()
-export class BooksService {
-  constructor(
-    @InjectRepository(Book) private bookRepository: Repository<Book>,
-  ) {}
-
-  async allBooks() {
-    return this.bookRepository.find();
-  }
-
-  async createBook(createBookDto: CreateBookDto) {
-    const book = this.bookRepository.create();
-    book.title = createBookDto.title;
-    book.author = createBookDto.author;
-    await book.save();
-
-    return book;
-  }
-
-  async getById(id: string) {
-    const book = await this.bookRepository.findOne(id);
-
-    if (!book) {
-      throw new NotFoundException('Book not found');
-    }
-
-    return book;
-  }
-
-  async updateBook(id: string, updateBookDto: UpdateBookDto): Promise<Book> {
-    const book = await this.getById(id);
-
-    return this.bookRepository.save({ ...book, ...updateBookDto });
-  }
-
-  async deleteBook(id: string): Promise<void> {
-    const res = await this.bookRepository.delete(id);
-
-    if (res.affected === 0) {
-      throw new NotFoundException('Book not found');
-    }
+export class BooksService extends BaseCrudService<
+  Book,
+  CreateBookDto,
+  UpdateBookDto
+> {
+  constructor(@InjectRepository(Book) bookRepository: Repository<Book>) {
+    super(bookRepository);
   }
 }
