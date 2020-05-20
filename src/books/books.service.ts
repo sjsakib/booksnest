@@ -25,11 +25,13 @@ export class BooksService {
   }
 
   async getById(id: string) {
-    try {
-      return await this.bookRepository.findOneOrFail(id);
-    } catch (e) {
+    const book = await this.bookRepository.findOne(id);
+
+    if (!book) {
       throw new NotFoundException('Book not found');
     }
+
+    return book;
   }
 
   async updateBook(id: string, updateBookDto: UpdateBookDto): Promise<Book> {

@@ -10,6 +10,7 @@ import {
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { IdValidationPipe } from '../common/id-validation.pipe';
 
 @Controller('books')
 export class BooksController {
@@ -26,17 +27,20 @@ export class BooksController {
   }
 
   @Get('/:id')
-  getById(@Param('id') id: string) {
+  getById(@Param('id', IdValidationPipe) id: string) {
     return this.booksService.getById(id);
   }
 
   @Patch('/:id')
-  updateBook(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
+  updateBook(
+    @Param('id', IdValidationPipe) id: string,
+    @Body() updateBookDto: UpdateBookDto,
+  ) {
     return this.booksService.updateBook(id, updateBookDto);
   }
 
   @Delete('/:id')
-  delete(@Param('id') id: string) {
+  delete(@Param('id', IdValidationPipe) id: string) {
     return this.booksService.deleteBook(id);
   }
 }
