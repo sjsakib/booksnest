@@ -27,7 +27,7 @@ export class BooksController extends BaseCrudController<
 
   @Get()
   books() {
-    return this.booksService.allItems();
+    return this.booksService.allItems(['authors']);
   }
 
   @Post()
@@ -37,7 +37,7 @@ export class BooksController extends BaseCrudController<
 
   @Get('/:id')
   getById(@Param('id', IdValidationPipe) id: string) {
-    return this.booksService.getById(id);
+    return this.booksService.getById(id, ['authors']);
   }
 
   @Patch('/:id')

@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { Matches, IsArray, IsOptional } from 'class-validator';
+import { uuidPattern } from 'src/common/uuid-pattern.constant';
 
 export class UpdateBookDto {
-  @IsNotEmpty()
-  @IsOptional()
   title: string;
 
-  @IsNotEmpty()
   @IsOptional()
-  author: string;
+  @IsArray()
+  @Matches(uuidPattern, { each: true, message: 'Invalid authorId provided' })
+  authors: string[] | undefined;
 }

@@ -1,7 +1,8 @@
 import { PipeTransform, BadRequestException } from '@nestjs/common';
+import { uuidPattern } from './uuid-pattern.constant';
 
 export class IdValidationPipe implements PipeTransform {
-  uuidPattern = /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/;
+  uuidPattern = uuidPattern;
 
   transform(value: string) {
     if (!this.uuidPattern.test(value)) {

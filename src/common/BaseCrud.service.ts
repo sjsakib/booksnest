@@ -5,8 +5,8 @@ import { Repository, BaseEntity } from 'typeorm';
 export class BaseCrudService<Entity extends BaseEntity, CreateDto, UpdateDto> {
   constructor(private repository: Repository<Entity>) {}
 
-  async allItems() {
-    return this.repository.find();
+  async allItems(relations?: string[]) {
+    return this.repository.find({ relations });
   }
 
   async createItem(createDto: CreateDto): Promise<Entity> {
@@ -16,8 +16,8 @@ export class BaseCrudService<Entity extends BaseEntity, CreateDto, UpdateDto> {
     return item;
   }
 
-  async getById(id: string): Promise<Entity> {
-    const item = await this.repository.findOne(id);
+  async getById(id: string, relations?: string[]): Promise<Entity> {
+    const item = await this.repository.findOne(id, { relations });
 
     if (!item) {
       throw new NotFoundException(`${this.repository.metadata.name} not found`);
